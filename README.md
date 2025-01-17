@@ -39,17 +39,40 @@ The dataset consisted of **12 critical features**, offering a well-rounded view 
 - **📊 Data Storytelling**: Interactive dashboards drove impactful visual narratives.  
 - **⏩ Automation**: ETL pipelines streamlined repetitive tasks, enhancing productivity.  
 ## 📸 Visualizations
+📊 Visualization Components
+The dashboard includes four main visualizations:
+- Excel DashBoard
 
 ![Screenshot 2025-01-17 002555](https://github.com/user-attachments/assets/5d2cbc05-8625-4abc-a306-a672b0892fa4)
 
-![Screenshot 2025-01-17 130207](https://github.com/user-attachments/assets/43261d28-5542-461b-940a-1333e86c1d5c)
-
-![Screenshot 2025-01-17 130142](https://github.com/user-attachments/assets/88411f94-3b80-4ce4-b296-7b39f7161804)
-
-![Screenshot 2025-01-17 130128](https://github.com/user-attachments/assets/8a21ed8e-d1c7-47b4-8649-808f0d1d0fc2)
+- Risk Distribution (Pie Chart)
 
 ![Screenshot 2025-01-17 130115](https://github.com/user-attachments/assets/013e18c4-f14c-4348-89e3-8db3baf935e3)
 
+- Loan Purpose Distribution (Bar Chart)
+
+![Screenshot 2025-01-17 130128](https://github.com/user-attachments/assets/8a21ed8e-d1c7-47b4-8649-808f0d1d0fc2)
+
+- Age Distribution (Bar Chart)
+
+![Screenshot 2025-01-17 130207](https://github.com/user-attachments/assets/43261d28-5542-461b-940a-1333e86c1d5c)
+
+- Credit Score Distribution (Bar Chart)
+
+![Screenshot 2025-01-17 130142](https://github.com/user-attachments/assets/88411f94-3b80-4ce4-b296-7b39f7161804)
+
+📋 Generated Reports
+The analysis generates several CSV files:
+
+basic_stats.csv: Basic statistical measures
+risk_distribution.csv: Distribution of risk categories
+loan_purpose.csv: Distribution of loan purposes
+employment_length.csv: Employment length distribution
+age_distribution.csv: Age bracket distribution
+credit_score_distribution.csv: Credit score distribution
+income_quartile_analysis.csv: Risk analysis by income quartiles
+correlations.csv: Correlation matrix
+summary_report.csv: Combined summary
 
 ## 🧾 Key Insights  
 - **Mean Income**: 💵 $112,511  
