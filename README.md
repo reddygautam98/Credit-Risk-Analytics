@@ -1,35 +1,185 @@
 # 💳 Credit Risk Analysis Project  
 
-## 🌟 Introduction  
-This project focuses on a **comprehensive credit risk analysis**, combining **Python**, **Excel**, and **Interactive Visualizations** to uncover insights that enhance risk management. By analyzing financial and demographic metrics, we built a pipeline that is scalable, efficient, and insightful.  
+# Credit Risk Analysis Project 
 
----
+## 🌟 Introduction  
+This project focuses on a **comprehensive credit risk analysis**, combining **Python**, **SQL**, **Excel**, and **Interactive Visualizations** to uncover insights that enhance risk management. By analyzing financial and demographic metrics, we built a pipeline that is scalable, efficient, and insightful.  
 
 ## 📚 Background  
 Credit risk assessment is pivotal in financial decision-making, impacting loan approvals and portfolio health. Our analysis dives into:  
-- 📊 **Key Metrics**: Income, debt, credit scores, loan amounts, and more.  
-- 🧩 **Correlations**: Unveiling relationships between variables to optimize decision-making.  
-- 🚩 **Risk Indicators**: Identifying high-risk segments to mitigate default rates.  
-
----
+- 📊 **Key Metrics**: Income, debt, credit scores, loan amounts, and more  
+- 🧩 **Correlations**: Unveiling relationships between variables to optimize decision-making  
+- 🚩 **Risk Indicators**: Identifying high-risk segments to mitigate default rates  
 
 ## 🛠️ Tools & Technologies  
 This project leveraged a hybrid approach, utilizing modern and traditional tools for robust analytics:  
-- **🖥️ Python**: Advanced analytics with `pandas`, `NumPy`, and visualization libraries.  
-- **📊 Excel**: For data preparation, pivot tables, and formula-driven analysis.  
-- **📈 Recharts**: Interactive visualizations for better storytelling.  
-- **🔄 ETL Pipelines**: Automated workflows for data extraction, transformation, and loading.  
-- **📉 Statistical Models**: Regression analysis for in-depth insights.  
-
----
+- **🖥️ Python**: Advanced analytics with `pandas`, `NumPy`, and visualization libraries
+- **💾 SQL**: Complex queries for data analysis and insights generation
+- **📊 Excel**: For data preparation, pivot tables, and formula-driven analysis
+- **📈 Recharts**: Interactive visualizations for better storytelling
+- **🔄 ETL Pipelines**: Automated workflows for data extraction, transformation, and loading
+- **📉 Statistical Models**: Regression analysis for in-depth insights
 
 ## 🚀 The Analysis  
-The dataset consisted of **12 critical features**, offering a well-rounded view of credit risk. Here’s what we accomplished:  
-1. **🧹 Data Cleaning**: Ensured consistency, removed duplicates, and handled missing values.  
-2. **📊 Descriptive Statistics**: Uncovered key metrics like mean income, average credit score, and loan size.  
-3. **📈 Visualization**: Created dashboards highlighting trends and risk segmentation.  
-4. **📉 Risk Profiling**: Segmented applicants into High, Medium, and Low-risk categories.  
-5. **🔗 Correlation Analysis**: Explored relationships between credit score, income, and delinquency rates.  
+
+### 1. Basic Portfolio Analysis
+```sql
+-- Portfolio Overview
+SELECT 
+    COUNT(*) as total_applications,
+    ROUND(AVG(Age), 2) as avg_age,
+    ROUND(AVG(Income), 2) as avg_income,
+    ROUND(AVG(Loan_Amount), 2) as avg_loan_amount,
+    ROUND(AVG(Credit_Score), 2) as avg_credit_score
+FROM credit_risk_analysis;
+
+-- Risk Distribution
+SELECT 
+    Risk_Category,
+    COUNT(*) as count,
+    ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM credit_risk_analysis), 2) as percentage
+FROM credit_risk_analysis
+GROUP BY Risk_Category
+ORDER BY count DESC;
+```
+
+### 2. Loan Purpose Analysis
+```sql
+WITH loan_stats AS (
+    SELECT 
+        Loan_Purpose,
+        COUNT(*) as total_applications,
+        ROUND(AVG(Loan_Amount), 2) as avg_loan_amount,
+        ROUND(AVG(Income), 2) as avg_income,
+        ROUND(AVG(Credit_Score), 2) as avg_credit_score
+    FROM credit_risk_analysis
+    GROUP BY Loan_Purpose
+)
+SELECT 
+    ls.*,
+    ROUND(total_applications * 100.0 / (SELECT COUNT(*) FROM credit_risk_analysis), 2) as portfolio_share
+FROM loan_stats ls
+ORDER BY total_applications DESC;
+```
+
+### 3. Credit Score Segmentation
+```sql
+WITH credit_segments AS (
+    SELECT *,
+        CASE 
+            WHEN Credit_Score < 580 THEN 'Poor'
+            WHEN Credit_Score < 670 THEN 'Fair'
+            WHEN Credit_Score < 740 THEN 'Good'
+            WHEN Credit_Score < 800 THEN 'Very Good'
+            ELSE 'Excellent'
+        END as credit_segment
+    FROM credit_risk_analysis
+)
+SELECT 
+    credit_segment,
+    COUNT(*) as total_applications,
+    ROUND(AVG(Loan_Amount), 2) as avg_loan_amount,
+    ROUND(AVG(Income), 2) as avg_income,
+    ROUND(AVG(Debt_to_Income_Ratio), 2) as avg_dti,
+    SUM(CASE WHEN Risk_Category = 'High' THEN 1 ELSE 0 END) as high_risk_count
+FROM credit_segments
+GROUP BY credit_segment
+ORDER BY credit_segment;
+```
+
+### 4. Income Analysis
+```sql
+WITH ranked_income AS (
+    SELECT *,
+        NTILE(5) OVER (ORDER BY Income) as income_quintile
+    FROM credit_risk_analysis
+)
+SELECT 
+    income_quintile,
+    MIN(Income) as min_income,
+    MAX(Income) as max_income,
+    ROUND(AVG(Loan_Amount), 2) as avg_loan_amount,
+    ROUND(AVG(Credit_Score), 2) as avg_credit_score,
+    COUNT(CASE WHEN Risk_Category = 'High' THEN 1 END) as high_risk_count
+FROM ranked_income
+GROUP BY income_quintile
+ORDER BY income_quintile;
+```
+
+### 5. Risk Factor Correlation Analysis
+```sql
+SELECT 
+    ROUND(CORR(Credit_Score, Loan_Amount), 4) as credit_score_loan_correlation,
+    ROUND(CORR(Income, Loan_Amount), 4) as income_loan_correlation,
+    ROUND(CORR(Debt_to_Income_Ratio, Loan_Amount), 4) as dti_loan_correlation,
+    ROUND(CORR(Age, Loan_Amount), 4) as age_loan_correlation,
+    ROUND(CORR(Delinquencies, Loan_Amount), 4) as delinquencies_loan_correlation
+FROM credit_risk_analysis;
+```
+
+### 6. Delinquency Impact Analysis
+```sql
+SELECT 
+    CASE 
+        WHEN Delinquencies = 0 THEN 'No Delinquencies'
+        WHEN Delinquencies BETWEEN 1 AND 3 THEN '1-3'
+        WHEN Delinquencies BETWEEN 4 AND 6 THEN '4-6'
+        ELSE '7+'
+    END as delinquency_group,
+    COUNT(*) as count,
+    ROUND(AVG(Credit_Score), 2) as avg_credit_score,
+    ROUND(AVG(Loan_Amount), 2) as avg_loan_amount,
+    COUNT(CASE WHEN Risk_Category = 'High' THEN 1 END) as high_risk_count
+FROM credit_risk_analysis
+GROUP BY delinquency_group
+ORDER BY delinquency_group;
+```
+
+## 📊 Key Findings
+
+1. **Risk Distribution**
+   - Analyzed the spread of risk categories across the portfolio
+   - Identified key factors contributing to high-risk classifications
+
+2. **Credit Score Impact**
+   - Segmented applications by credit score ranges
+   - Analyzed correlation between credit scores and loan approval rates
+
+3. **Income Patterns**
+   - Created income quintiles for detailed analysis
+   - Studied the relationship between income levels and risk categories
+
+4. **Delinquency Analysis**
+   - Evaluated the impact of past delinquencies on risk assessment
+   - Created delinquency groups for better risk stratification
+
+## 🎯 Recommendations
+
+1. **Risk Management**
+   - Implement stricter credit score thresholds for high-risk categories
+   - Develop specialized products for different risk segments
+
+2. **Portfolio Optimization**
+   - Balance the portfolio across risk categories
+   - Adjust loan amounts based on income quintiles
+
+3. **Monitoring System**
+   - Regular tracking of delinquency patterns
+   - Implementation of early warning systems
+
+## 📈 Future Enhancements
+
+1. **Machine Learning Integration**
+   - Implement predictive models for risk assessment
+   - Develop automated scoring systems
+
+2. **Real-time Analytics**
+   - Create dashboard for live monitoring
+   - Implement automated alert systems
+
+3. **Enhanced Reporting**
+   - Develop automated report generation
+   - Create interactive visualization dashboards
 
 ---
 
