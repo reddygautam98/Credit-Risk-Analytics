@@ -121,6 +121,6 @@ def analyze_credit_risk(input_file, output_prefix):
 
 if __name__ == "__main__":
     # Usage example
-    input_file = "Credit_Risk_Analysis_Dataset.csv"
+    input_file = r"Credit-Risk-Analytics-main\Credit_Risk_Analysis_Dataset.csv"
     output_prefix = "credit_risk_analysis"
     analyze_credit_risk(input_file, output_prefix)
