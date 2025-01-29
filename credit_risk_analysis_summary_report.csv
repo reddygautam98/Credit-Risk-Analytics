@@ -1,0 +1,55 @@
+Credit Risk Analysis Summary
+
+Basic Statistics
+Metric,Value
+Total Applications,100000.0
+Average Age,43.50027
+Average Income,112511.05433
+Average Credit Score,575.63354
+Average Loan Amount,252950.36262
+Average Debt to Income Ratio,0.5995161
+
+Risk Distribution
+Risk_Category,Count
+High,54536
+Medium,27284
+Low,18180
+
+Loan Purpose Distribution
+Loan_Purpose,Count
+Education,20071
+Home,20059
+Business,19988
+Personal,19988
+Car,19894
+
+Employment Length Distribution
+Employment_Length,Count
+4-6 years,20142
+7-10 years,20036
+<1 year,19971
+1-3 years,19939
+>10 years,19912
+
+Age Distribution
+Age_Bracket,Count
+55+,26833
+36-45,19445
+26-35,19254
+46-55,19200
+18-25,15268
+
+Credit Score Distribution
+Credit_Score_Range,Count
+Poor (<580),50630
+Fair (580-669),16260
+Good (670-739),12855
+Very Good (740-799),11071
+Excellent (800+),9184
+
+Income Quartile Analysis
+Quartile,Min_Income,Max_Income,Low_Risk,Medium_Risk,High_Risk
+Q1,25001,68905,4467,6816,13718
+Q2,68907,112342,4554,6869,13576
+Q3,112349,156318,4666,6727,13607
+Q4,156326,199994,4493,6872,13635
